@@ -1,0 +1,27 @@
+
+apply plugin: 'java'
+
+jar {
+    baseName = 'Py4jSever'
+    version =  '0.1.0'
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+	compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+//create a single Jar with all dependencies
+task fatJar(type: Jar) {
+	manifest {
+        attributes 'Main-Class': 'hello.Py4jServer'
+    }
+    
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
